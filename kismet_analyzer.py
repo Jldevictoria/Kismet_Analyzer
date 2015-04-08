@@ -2,7 +2,7 @@
 # Joseph DeVictoria - ECEN 490 - April 2015
 # This script will take in a kismet .gpsxml file and spit out heatmap data.
 
-import sys
+import sys, simplekml
 
 # Packet class used to hold all the information of individual kismet packets.
 class Packet(object):
@@ -139,7 +139,13 @@ for src in packet_sources:
 
 # Sort the list of routers by packet count.
 routers = sorted(routers, key=lambda router: router.packet_count)
+
+# Create KML file based off of gps locations.
+kml = simplekml.Kml()
 for src in routers:
-    print "-------------------------------------------------"
-    print "Source #" + str(routers.index(src))
-    print src
+    kml.newpoint(name=(str(src.bssid) + " " + str(src.packet_count)), \
+                          coords=[(str(src.lon_ave), str(src.lat_ave))])
+if len(sys.argv) > 2:
+    kml.save(str(sys.argv[2]))
+else:
+    kml.save("testk.kml")
