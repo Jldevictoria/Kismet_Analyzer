@@ -143,7 +143,8 @@ routers = sorted(routers, key=lambda router: router.packet_count)
 # Create KML file based off of gps locations.
 kml = simplekml.Kml()
 for src in routers:
-    kml.newpoint(name=(str(src.bssid) + " " + str(src.packet_count)), \
+    kml.newpoint(name=(str(src.bssid) + " " + str(src.signal_dbm_ave) \
+                          + " " + str(src.packet_count)), \
                           coords=[(str(src.lon_ave), str(src.lat_ave))])
 if len(sys.argv) > 2:
     kml.save(str(sys.argv[2]))
